@@ -3,11 +3,12 @@
 
 import datetime
 import os
+import yaml
 
 
 class Time(object):
 
-    def hola(self):
+    def timenow(self):
         """docstring for writelog"""
 
         hora = str(datetime.datetime.today())
@@ -41,12 +42,49 @@ class Time(object):
         except IOError:
             pass
 
+    def countnumber(self, mydir):
+        """docstring for countnumber"""
+
+        fnumber = len(os.listdir(mydir))
+        if fnumber == 0:
+            fflag = False
+        else:
+            fflag = True
+        print fflag
+        return fflag
+        pass
+
+
+class Parseryml(object):
+
+    def fileparser(self):
+        """ docstring for fileparser """
+
+        with open('settings.yml', 'r') as f:
+            doc = yaml.load(f)
+        print doc
+        return doc
+        pass
+
+    def extraction(self, internalinfo):
+        """ docstring for extraction """
+
+        txt = internalinfo["directory"]
+        print txt
+        return txt
+        pass
+
 
 def main():
     """doctring for main"""
+
+    info = Parseryml()
+    internalinfo = info.fileparser()
+    mydir = info.extraction(internalinfo)
     monitor = Time()
-    hora = monitor.hola()
+    hora = monitor.timenow()
     outreq = monitor.machine()
+    monitor.countnumber(mydir)
     monitor.writelog(hora, outreq)
 
 
