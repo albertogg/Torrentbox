@@ -4,6 +4,7 @@
 import datetime
 import os
 import yaml
+import json
 
 
 class Time(object):
@@ -75,6 +76,18 @@ class Parseryml(object):
         pass
 
 
+class Sender(object):
+
+    def json_obj(self, hora, outreq, myflag):
+        """ docstring for json_obj """
+
+        obj_to_send = [{'time':hora, 'statistics':(outreq), 'fill':myflag}]
+        print 'JSON:', json.dumps(obj_to_send)
+        print 'INDENT:', json.dumps(obj_to_send, sort_keys=True, indent=2)
+        return obj_to_send
+        pass
+
+
 def main():
     """doctring for main"""
 
@@ -82,10 +95,12 @@ def main():
     internalinfo = info.fileparser()
     mydir = info.extraction(internalinfo)
     monitor = Time()
+    oh = Sender()
     hora = monitor.timenow()
     outreq = monitor.machine()
-    monitor.countnumber(mydir)
+    myflag = monitor.countnumber(mydir)
     monitor.writelog(hora, outreq)
+    oh.json_obj(hora, outreq, myflag)
 
 
 if __name__ == '__main__':
