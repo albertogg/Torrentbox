@@ -1,6 +1,7 @@
 from flask import Flask
 from flask import json
 from flask import request
+from flask import render_template
 import psycopg2
 from flask.ext.sqlalchemy import SQLAlchemy
 
@@ -51,11 +52,12 @@ class Log(db.Model):
 db.create_all()
 
 
-@app.route("/")
-def hello():
+@app.route('/')
+@app.route('/index')
+def index():
     # return "Hello World!"
-    user = User.query.all()
-    return '%r' % user
+    user = User.query.filter_by(username='admin').first()
+    return render_template('index.html', title='OMG', user=user)
 
 
 @app.route('/logger', methods=['POST'])
@@ -66,4 +68,4 @@ def api_recieve():
         return "415 not supported Content-Type"
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host='0.0.0.0', debug=True)
