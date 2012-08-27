@@ -13,29 +13,35 @@
 <body>
   <div class="navbar navbar-fixed-top">
     <div class="navbar-inner">
-      <div class="container">
-        <a class="brand bolas" href="/">Torrentbox</a>
-      </div>
+        <a class="brand" href="/">Torrentbox</a>
+        <ul class="nav right">
+          <li><a href="{{ url_for('signin') }}">Sign in</a></li>
+        </ul>
     </div>
   </div>
-  <div class="container-fluid">
-    <div class="row">
-      <div class="tabbable tabs-left">
-        <ul class="nav nav-tabs">
-          <li class="active"><a href="#status" data-toggle="tab">Status</a></li>
-          <li><a href="#logs" data-toggle="tab">Logs</a></li>
-        </ul>
-        <div class="tab-content">
-          <div class="tab-pane active" id="status">
-            {% block content %}{% endblock %}
-          </div>
-          <div class="tab-pane" id="logs">
-            {% block content2 %}{% endblock %}
-          </div>
-        </div> <!-- .tab-content -->
-      </div> <!-- .tabbable .tabs-left -->
-    </div> <!-- .row -->
-  </div> <!-- .container-fluid -->
+  <div>
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        {% if error %}
+          <ul class="alert alert-error">
+            {% for message in messages %}
+              <li class="clean-bullet">{{ message }} </li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <ul class="alert alert-success">
+            {% for message in messages %}
+              <li class="clean-bullet">{{ message }} </li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      {% endif %}
+    {% endwith %}
+  </div>
+
+    {% block content %}{% endblock %}
+
+    {% block footer %}{% endblock %}
 
   <!-- jQuery via Google + local fallback, see h5bp.com -->
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>

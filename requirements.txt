@@ -2,4 +2,5 @@ PyYAML
 requests
 Flask
 Flask-SQLAlchemy
+Flask-WTF
 psycopg2

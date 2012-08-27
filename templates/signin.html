@@ -1,0 +1,42 @@
+ {% extends "base.html" %}
+  {% block content %}
+  <div class="container">
+    <div class="span6 offset3">
+      <form class="form-horizontal" method="POST" action="">
+        <legend>Sign in form</legend>
+        <div class="control-group">
+          {{ form.csrf_token }}
+          <label class="control-label" for="inputEmail">
+            {{ form.email.label }}
+          </label>
+          <div class="controls">
+            {{ form.email(id="inputEmail", placeholder="Example@email.com") }}
+            {% for error in form.errors.email %}
+              <span class="help-inline">{{ error }}</span>
+            {% endfor %}
+          </div>
+        </div>
+        <div class="control-group">
+          <label class="control-label" for="inputPassword">
+            {{ form.password.label }}
+          </label>
+          <div class="controls">
+            {{ form.password(id="inputPassword", placeholder="Password") }}
+          </div>
+        </div>
+        <div class="control-group">
+          <div class="controls">
+            <label class="checkbox">
+              <input type="checkbox"> Remember me
+            </label>
+            <button type="submit" class="btn">Sign in</button>
+          </div>
+        </div>
+      </form>
+      <div>
+        <p>If you don't have an account get one now!
+         <a href="{{ url_for('register') }}">Register</a></p>
+      </div>
+    </div>
+  </div>
+  {% endblock %}

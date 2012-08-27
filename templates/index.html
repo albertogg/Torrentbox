@@ -1,19 +1,37 @@
 {% extends "base.html" %}
 {% block content %}
-  <div class="span12">
-    {% if user %}
-      <h1>Hello, {{user.username}}</h1>
-    {% else %}
-      <h1>Hello, stranger</h1>
-    {% endif %}
-  </div>
-{% endblock%}
-{% block content2 %}
-  <div class="span12">
-    {% if user %}
-      <h1>Hello!, {{user.username}}</h1>
-    {% else %}
-      <h1>Hello, stranger</h1>
-    {% endif %}
-  </div>
-{% endblock%}
+  <div class="container">
+    <div class="row">
+      <div class="tabbable tabs-left">
+        <ul class="nav nav-tabs">
+          <li class="active"><a href="#status" data-toggle="tab">Status</a></li>
+          <li><a href="#logs" data-toggle="tab">Logs</a></li>
+        </ul>
+        <div class="tab-content">
+          <div class="tab-pane active" id="status">
+              <div class="span4">
+                {% if user %}
+                  <h3>Hello, {{user.username}}</h3></br>
+                  <p>The current status of your torrentbox is: <span class="label label-important">offline</span></p>
+                {% else %}
+                  <h3>Hello, stranger</h3>
+                {% endif %}
+              </div>
+          </div>
+          <div class="tab-pane" id="logs">
+            <div class="span8">
+              {% if log %}
+                <h3>torrent box latest logz.</h3></br>
+                {% for l in log %}
+                  {{ l.hostname }}: {{ l.time }}; {{ l.uptime }}
+                {% endfor %}
+              {% else %}
+                <h3>be cool bro, you have an empty log.</h3>
+              {% endif %}
+            </div>
+          </div>
+        </div> <!-- .tab-content -->
+      </div> <!-- .tabbable .tabs-left -->
+    </div> <!-- .row -->
+  </div> <!-- .container-fluid -->
+{% endblock %}

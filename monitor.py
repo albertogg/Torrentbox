@@ -3,8 +3,10 @@
 
 import datetime
 import os
+import sys
 import yaml
 import json
+import requests
 
 
 class Time(object):
@@ -20,10 +22,10 @@ class Time(object):
 
         outreq = []
         i = 0
-        osreq = ['uptime', 'hostname', 'uname -s']
+        osreq = ['uptime', 'hostname']
         for req in osreq:
             sup = os.popen(req).read().strip('\n')
-            outreq.append(osreq[i] + ': ' + sup)
+            outreq.append(sup)
             i = i + 1
         print outreq
         return outreq
@@ -81,10 +83,23 @@ class Sender(object):
     def json_obj(self, hora, outreq, myflag):
         """ docstring for json_obj """
 
-        obj_to_send = [{'time':hora, 'statistics':(outreq), 'fill':myflag}]
+        obj_to_send = {'time': hora, 'statistics': (outreq), 'fill': myflag}
         print 'JSON:', json.dumps(obj_to_send)
         print 'INDENT:', json.dumps(obj_to_send, sort_keys=True, indent=2)
         return obj_to_send
+        pass
+
+    def send_json(self, j):
+        """ docstring for send_json """
+
+        url = 'http://localhost:5000/logger'
+        headers = {'Content-type': 'application/json'}
+        r = requests.post(url, data=json.dumps(j), headers=headers)
+        if r.status_code == requests.codes.ok:
+            print r.text
+        else:
+            print "this request gave error status"
+            sys.exit(1)
         pass
 
 
@@ -100,7 +115,8 @@ def main():
     outreq = monitor.machine()
     myflag = monitor.countnumber(mydir)
     monitor.writelog(hora, outreq)
-    oh.json_obj(hora, outreq, myflag)
+    j = oh.json_obj(hora, outreq, myflag)
+    oh.send_json(j)
 
 
 if __name__ == '__main__':
