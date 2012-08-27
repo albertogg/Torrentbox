@@ -98,7 +98,7 @@ def register():
         flash('Thanks for registering')
         # redirect user to the 'home' method of the user module.
         return redirect(url_for('index'))
-    return render_template("register.html", form=form)
+    return render_template("forms/register.html", form=form)
 
 
 @app.route('/signin', methods=['GET', 'POST'])
@@ -120,7 +120,17 @@ def signin():
             error = 'wrong combination username/password'
             flash(error)
 
-    return render_template("signin.html", title='Sign in', form=form, error=error)
+    return render_template("forms/signin.html", title='Sign in',
+                                                form=form, error=error)
+
+
+@app.route('/signout')
+def signout():
+    """
+    signout
+    """
+    session.pop('username', None)
+    return redirect(url_for('index'))
 
 
 if __name__ == "__main__":

@@ -1,5 +1,9 @@
-body {
-  padding-top: 60px
+html, body {
+    height: 100%;
+}
+
+.con2 {
+  padding-top: 60px;
 }
 
 .navbar .brand {
@@ -14,19 +18,37 @@ body {
           transition: all .2s linear;
 }
 
-li.clean-bullet {
+.clean-bullet {
   list-style-type: none;
 }
 
-.navbar ul.right {
+.navbar .right {
   float: right;
 }
 
-.spacer-block {
-  height: 2em;
+footer {
+    color: #666;
+    background: #222;
+    padding: 17px 0 18px 0;
+    border-top: 1px solid #000;
+}
+footer a {
+    color: #999;
+}
+footer a:hover {
+    color: #efefef;
 }
 
-.center {
-  margin-left: auto;
-  margin-right: auto;
+.wrapper {
+    min-height: 100%;
+    height: auto !important;
+    height: 100%;
+    margin: 0 auto -66px;
+}
+.push {
+    height: 63px;
+}
+/* not required for sticky footer; just pushes hero down a bit */
+.wrapper > .container {
+    padding-top: 60px;
 }

@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+  {% block content %}
+  <div class="container">
+    <div class="span8 offset2">
+      <form class="form-horizontal" method="POST" action="">
+        {{ form.csrf_token }}
+        <legend>Register form</legend>
+        <div class="control-group">
+          <label class="control-label" for="inputUser">
+            {{ form.username.label }}
+          </label>
+          <div class="controls">
+            {{ form.username(id="inputUser", placeholder="Username") }}
+            {% for error in form.errors.username %}
+              <span class="help-inline">{{ error }}</span>
+            {% endfor %}
+          </div>
+        </div>
+        <div class="control-group">
+          <label class="control-label" for="inputEmail">
+            {{ form.email.label }}
+          </label>
+          <div class="controls">
+            {{ form.email(id="inputEmail", placeholder="Example@email.com") }}
+            {% for error in form.errors.email %}
+              <span class="help-inline">{{ error }}</span>
+            {% endfor %}
+          </div>
+        </div>
+        <div class="control-group">
+          <label class="control-label" for="inputPassword">
+            {{ form.password.label }}
+          </label>
+          <div class="controls">
+            {{ form.password(id="inputPassword", placeholder="Password") }}
+            {% for error in form.errors.password %}
+              <span class="help-inline">{{ error }}</span>
+            {% endfor %}
+          </div>
+        </div>
+        <div class="control-group">
+          <label class="control-label" for="inputPassword">
+            {{ form.confirm.label }}
+          </label>
+          <div class="controls">
+            {{ form.confirm(id="inputConfirm", placeholder="Confirm Password") }}
+            {% for error in form.errors.confirm %}
+              <span class="help-inline">{{ error }}</span>
+            {% endfor %}
+          </div>
+        </div>
+        <div class="control-group">
+          <div class="controls">
+            <button type="submit" class="btn">Sign in</button>
+          </div>
+        </div>
+      </form>
+      <div>
+        <p>If you have an account get one now!
+         <a href="{{ url_for('signin') }}">Sign in</a> now!</p>
+      </div>
+    </div>
+  </div>
+  {% endblock %}

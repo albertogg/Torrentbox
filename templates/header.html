@@ -1,0 +1,33 @@
+<div class="navbar navbar-fixed-top">
+  <div class="navbar-inner">
+      <a class="brand" href="/">Torrentbox</a>
+      <ul class="nav right">
+        {% if session['username'] %}
+          <li><a href="{{ url_for('signout') }}">Sign Out</a></li>
+        {% else %}
+          <li><a href="{{ url_for('signin') }}">Sign in</a></li>
+        {% endif %}
+      </ul>
+  </div>
+</div>
+<div class="container">
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <div class="con2">
+      {% if error %}
+        <ul class="alert alert-error">
+          {% for message in messages %}
+            <li class="clean-bullet">{{ message }} </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <ul class="alert alert-success">
+          {% for message in messages %}
+            <li class="clean-bullet">{{ message }} </li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    </div>
+    {% endif %}
+  {% endwith %}
+</div>
