@@ -27,7 +27,6 @@ class Time(object):
             sup = os.popen(req).read().strip('\n')
             outreq.append(sup)
             i = i + 1
-        print outreq
         return outreq
 
     def writelog(self, hora, outreq):
@@ -37,7 +36,7 @@ class Time(object):
         for req in outreq[:-1:]:
             sysout = sysout + ' ' + req
         try:
-            logfile = open("monitor.log", "a")
+            logfile = open(os.path.abspath("monitor.log"), "a")
             try:
                 logfile.write("[" + hora + "]" + sysout + "\n")
             finally:
@@ -53,7 +52,6 @@ class Time(object):
             fflag = False
         else:
             fflag = True
-        print fflag
         return fflag
         pass
 
@@ -63,9 +61,8 @@ class Parseryml(object):
     def fileparser(self):
         """ docstring for fileparser """
 
-        with open('settings.yml', 'r') as f:
+        with open(os.path.abspath('settings.yml'), 'r') as f:
             doc = yaml.load(f)
-        print doc
         return doc
         pass
 
@@ -77,8 +74,6 @@ class Sender(object):
 
         obj_to_send = {'time': hora, 'statistics': (outreq), 'fill': myflag,
                         'username': internalinfo['username']}
-        print 'JSON:', json.dumps(obj_to_send)
-        print 'INDENT:', json.dumps(obj_to_send, sort_keys=True, indent=2)
         return obj_to_send
         pass
 

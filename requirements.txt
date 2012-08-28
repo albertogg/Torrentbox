@@ -1,6 +1,11 @@
-PyYAML
-requests
-Flask
-Flask-SQLAlchemy
-Flask-WTF
-psycopg2
+Flask==0.9
+Flask-SQLAlchemy==0.16
+Flask-WTF==0.8
+Jinja2==2.6
+PyYAML==3.10
+SQLAlchemy==0.7.8
+WTForms==1.0.1
+Werkzeug==0.8.3
+psycopg2==2.4.5
+requests==0.13.6
+wsgiref==0.1.2

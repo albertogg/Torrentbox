@@ -13,7 +13,7 @@
                 {% if user %}
                   <h3>Hello, {{user.username}}</h3></br>
                   {% if status %}
-                    <p>The current status of your torrentbox is: <span class="label label-success">online</span></p>
+                    <p>The current torrentbox status is: <span class="label label-success">online</span></p>
                   {% else %}
                     <p>The current status of your torrentbox is: <span class="label label-important">offline</span></p>
                   {% endif %}
@@ -32,7 +32,7 @@
               {% if log %}
                 <h3>torrent box latest logz.</h3></br>
                 {% for l in log %}
-                  {{ l.hostname }}: {{ l.time }}; {{ l.uptime }}</br>
+                  <strong>{{ l.hostname }}: </strong>{{ l.time }}; {{ l.uptime }}</br>
                 {% endfor %}
               {% else %}
                 <h3>be cool bro, you have an empty log.</h3>

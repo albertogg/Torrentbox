@@ -7,9 +7,10 @@ from flask.ext.sqlalchemy import SQLAlchemy
 from forms import SigninForm, RegistrationForm
 from werkzeug import check_password_hash, generate_password_hash
 from datetime import datetime, timedelta
+import os
 
 app = Flask(__name__)
-app.config.from_object('config.DevelopmentConfig')
+app.config.from_object('config.ProductionConfig')
 db = SQLAlchemy(app)
 
 
@@ -81,14 +82,14 @@ def index():
                 status = True
                 queue = lastlog.flagger
 
-        return render_template('index.html', title='OMG', user=user,
+        return render_template('index.html', title='Index', user=user,
                                 log=log, status=status, queue=queue)
     else:
         username = None
         user = None
         log = None
         status = None
-        return render_template('index.html', title='OMG', user=user, log=log,
+        return render_template('index.html', title='Index', user=user, log=log,
                                                             status=status)
 
 
@@ -138,7 +139,7 @@ def register():
         flash('Thanks for registering')
         # redirect user to the 'home' method of the user module.
         return redirect(url_for('index'))
-    return render_template("forms/register.html", form=form)
+    return render_template("forms/register.html", title='Register', form=form)
 
 
 @app.route('/signin', methods=['GET', 'POST'])
@@ -174,4 +175,5 @@ def signout():
 
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0')
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port)
