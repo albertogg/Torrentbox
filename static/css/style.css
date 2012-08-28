@@ -26,6 +26,10 @@ html, body {
   float: right;
 }
 
+.navbar .left {
+  float: left;
+}
+
 footer {
     color: #666;
     background: #222;

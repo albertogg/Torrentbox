@@ -1,7 +1,8 @@
 <div class="navbar navbar-fixed-top">
   <div class="navbar-inner">
       <a class="brand" href="/">Torrentbox</a>
-      <ul class="nav right">
+      <ul class="nav pull-right">
+          <li><a href="{{ url_for('about') }}">About</a></li>
         {% if session['username'] %}
           <li><a href="{{ url_for('signout') }}">Sign Out</a></li>
         {% else %}

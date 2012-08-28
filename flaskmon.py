@@ -6,6 +6,7 @@ import psycopg2
 from flask.ext.sqlalchemy import SQLAlchemy
 from forms import SigninForm, RegistrationForm
 from werkzeug import check_password_hash, generate_password_hash
+from datetime import datetime, timedelta
 
 app = Flask(__name__)
 app.config.from_object('config.DevelopmentConfig')
@@ -29,16 +30,21 @@ class User(db.Model):
 
 class Log(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    time = db.Column(db.String(200))
+    time = db.Column(db.DateTime)
     uptime = db.Column(db.String(200))
     hostname = db.Column(db.String(20))
     flagger = db.Column(db.Boolean)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    user = db.relationship('User', backref='log', lazy='dynamic')
 
-    def __init__(self, time, uptime, hostname, flagger):
+    def __init__(self, time, uptime, hostname, flagger, user_id):
+        self.returns = 0
+        self.errors = 0
         self.time = time
         self.uptime = uptime
         self.hostname = hostname
         self.flagger = flagger
+        self.user_id = user_id
 
     def __repr__(self):
         return '<Log %r>' % (self.hostname)
@@ -56,13 +62,27 @@ db.create_all()
 @app.route('/')
 @app.route('/index')
 def index():
+    """
+    index page
+    """
     # shit got real
     if 'username' in session:
-        user = User.query.filter_by(username=escape(session['username'])).first()
-        log = Log.query.all()
-        status = Log.query.order_by('-id').first()
-        return render_template('index.html', title='OMG', user=user, log=log,
-                                                            status=status)
+        status = None
+        queue = None
+        user = User.query.filter_by(username=escape(
+                                                session['username'])).first()
+        log = Log.query.filter_by(user_id=user.id).all()
+        lastlog = Log.query.order_by('-id').first()
+        if lastlog is not None:
+            if (datetime.now() - lastlog.time) > timedelta(minutes=35):
+                status = False
+                queue = lastlog.flagger
+            else:
+                status = True
+                queue = lastlog.flagger
+
+        return render_template('index.html', title='OMG', user=user,
+                                log=log, status=status, queue=queue)
     else:
         username = None
         user = None
@@ -72,10 +92,30 @@ def index():
                                                             status=status)
 
 
+@app.route('/about')
+def about():
+    """
+    about page
+    """
+    return render_template('about.html', title='about')
+
+
 @app.route('/logger', methods=['POST'])
 def api_recieve():
+    """
+    logger, a endpoint url.
+
+    """
     if request.headers['Content-type'] == 'application/json':
-        return "JSON message: " + json.dumps(request.json)
+        # return "JSON message: " + json.dumps(request.json)
+        jdata = json.loads(json.dumps(request.json))
+        identifier = jdata['username']
+        userid = User.query.filter_by(username=identifier).first()
+        log = Log(jdata['time'], jdata['statistics'][0],
+                    jdata['statistics'][1], jdata['fill'], userid.id)
+        db.session.add(log)
+        db.session.commit()
+        return "Your log has been saved!"
     else:
         return "415 not supported Content-Type"
 
@@ -88,7 +128,7 @@ def register():
 
     form = RegistrationForm(request.form)
     if form.validate_on_submit():
-        user = User(form.name.data, form.email.data,
+        user = User(form.username.data, form.email.data,
                         generate_password_hash(form.password.data))
         db.session.add(user)
         db.session.commit()
@@ -134,5 +174,4 @@ def signout():
 
 
 if __name__ == "__main__":
-    # quitar el debug despeus
-    app.run(host='0.0.0.0', debug=True)
+    app.run(host='0.0.0.0')

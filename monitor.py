@@ -45,10 +45,10 @@ class Time(object):
         except IOError:
             pass
 
-    def countnumber(self, mydir):
+    def countnumber(self, internalinfo):
         """docstring for countnumber"""
 
-        fnumber = len(os.listdir(mydir))
+        fnumber = len(os.listdir(internalinfo['directory']))
         if fnumber == 0:
             fflag = False
         else:
@@ -69,30 +69,23 @@ class Parseryml(object):
         return doc
         pass
 
-    def extraction(self, internalinfo):
-        """ docstring for extraction """
-
-        txt = internalinfo["directory"]
-        print txt
-        return txt
-        pass
-
 
 class Sender(object):
 
-    def json_obj(self, hora, outreq, myflag):
+    def json_obj(self, hora, outreq, myflag, internalinfo):
         """ docstring for json_obj """
 
-        obj_to_send = {'time': hora, 'statistics': (outreq), 'fill': myflag}
+        obj_to_send = {'time': hora, 'statistics': (outreq), 'fill': myflag,
+                        'username': internalinfo['username']}
         print 'JSON:', json.dumps(obj_to_send)
         print 'INDENT:', json.dumps(obj_to_send, sort_keys=True, indent=2)
         return obj_to_send
         pass
 
-    def send_json(self, j):
+    def send_json(self, j, internalinfo):
         """ docstring for send_json """
 
-        url = 'http://localhost:5000/logger'
+        url = internalinfo['url']
         headers = {'Content-type': 'application/json'}
         r = requests.post(url, data=json.dumps(j), headers=headers)
         if r.status_code == requests.codes.ok:
@@ -108,15 +101,14 @@ def main():
 
     info = Parseryml()
     internalinfo = info.fileparser()
-    mydir = info.extraction(internalinfo)
     monitor = Time()
     oh = Sender()
     hora = monitor.timenow()
     outreq = monitor.machine()
-    myflag = monitor.countnumber(mydir)
+    myflag = monitor.countnumber(internalinfo)
     monitor.writelog(hora, outreq)
-    j = oh.json_obj(hora, outreq, myflag)
-    oh.send_json(j)
+    j = oh.json_obj(hora, outreq, myflag, internalinfo)
+    oh.send_json(j, internalinfo)
 
 
 if __name__ == '__main__':
