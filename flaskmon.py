@@ -72,7 +72,7 @@ def index():
         queue = None
         user = User.query.filter_by(username=escape(
                                                 session['username'])).first()
-        log = Log.query.filter_by(user_id=user.id).all()
+        log = Log.query.filter_by(user_id=user.id).limit(16)
         lastlog = Log.query.order_by('-id').first()
         if lastlog is not None:
             if (datetime.now() - lastlog.time) > timedelta(minutes=35):
