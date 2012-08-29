@@ -1,3 +1,8 @@
-username: albertogg
-directory: /Users/albertogg/Dropbox/torrents
+# Your settings for monitor.py to work.
+
+# flaskmon.py site username.
+username: username
+# Path to the torrent directory.
+directory: /path/to/directory
+# URI to server.
 url: http://localhost:5000/logger
