@@ -9,13 +9,13 @@
         </ul>
         <div class="tab-content">
           <div class="tab-pane active" id="status">
-              <div class="span12">
+              <div class="span10">
                 {% if user %}
                   <h3>Hello, {{user.username}}</h3></br>
                   {% if status %}
                     <p>The current torrentbox status is: <span class="label label-success">online</span></p>
                   {% else %}
-                    <p>The current status of your torrentbox is: <span class="label label-important">offline</span></p>
+                    <p>The current torrentbox status is: <span class="label label-important">offline</span></p>
                   {% endif %}
                   {% if queue %}
                     <p>You have items in the <span class="label label-warning">queue</span> waiting to be downloaded!</p>
@@ -28,9 +28,9 @@
               </div>
           </div>
           <div class="tab-pane" id="logs">
-            <div class="span12">
+            <div class="span10">
               {% if log %}
-                <h3>torrent box latest logz.</h3></br>
+                <h3>Your torrentbox latest logs.</h3></br>
                 {% for l in log %}
                   <strong>{{ l.hostname }}: </strong>{{ l.time }}; {{ l.uptime }}</br>
                 {% endfor %}

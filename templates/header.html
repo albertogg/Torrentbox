@@ -4,7 +4,10 @@
       <ul class="nav pull-right">
           <li><a href="{{ url_for('about') }}">About</a></li>
         {% if session['username'] %}
-          <li><a href="{{ url_for('signout') }}">Sign Out</a></li>
+          {% if user %}
+            <li><a href="{{ url_for('user', username=user.username) }}">Hi! <strong>{{user.username}}</strong></a></li>
+            <li><a href="{{ url_for('signout') }}">Sign Out</a></li>
+          {% endif %}
         {% else %}
           <li><a href="{{ url_for('signin') }}">Sign in</a></li>
         {% endif %}

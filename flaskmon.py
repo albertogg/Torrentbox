@@ -4,7 +4,7 @@ from flask import request
 from flask import render_template, flash, redirect, url_for, escape, session
 import psycopg2
 from flask.ext.sqlalchemy import SQLAlchemy
-from forms import SigninForm, RegistrationForm
+from forms import SigninForm, RegistrationForm, EditUserForm
 from werkzeug import check_password_hash, generate_password_hash
 from datetime import datetime, timedelta
 import os
@@ -99,7 +99,48 @@ def about():
     """
     about page
     """
-    return render_template('about.html', title='about')
+    if 'username' in session:
+        user = User.query.filter_by(username=escape(
+                                                session['username'])).first()
+        return render_template('about.html', title='About', user=user)
+    else:
+        return render_template('about.html', title='About')
+
+
+@app.route('/user/<username>/edit', methods=['GET', 'POST'])
+def user(username):
+    """
+    user <username> edit
+
+    """
+    if 'username' in session:
+        form = EditUserForm(request.form)
+        user = User.query.filter_by(username=username).first()
+        if user == None:
+            return redirect(url_for('index'))
+        else:
+            if user.username == escape(session['username']):
+                if form.validate_on_submit():
+                    user.username = form.username.data
+                    user.email = form.email.data
+                    user.password = generate_password_hash(form.password.data)
+                    db.session.add(user)
+                    db.session.commit()
+
+                    session['username'] = user.username
+                    # flash will display a message to the user
+                    flash('Update Successful!')
+                    # redirect user to the 'home' method of the user module.
+                    return redirect(url_for('index'))
+                else:
+                    form.username.data = user.username
+                    form.email.data = user.email
+                return render_template('user.html', title='Edit User',
+                                        user=user, form=form)
+            else:
+                return redirect(url_for('index'))
+    else:
+        return redirect(url_for('index'))
 
 
 @app.route('/logger', methods=['POST'])
@@ -156,7 +197,6 @@ def signin():
 
         if user and check_password_hash(user.password, form.password.data):
             session['username'] = user.username
-            flash('welcome %s' % user.username)
             return redirect(url_for('index'))
         else:
             error = 'wrong combination username/password'

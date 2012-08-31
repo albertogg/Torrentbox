@@ -4,7 +4,7 @@
     <div class="span8 offset2">
       <form class="form-horizontal" method="POST" action="">
         {{ form.csrf_token }}
-        <legend>Register form</legend>
+        <legend>{{ title }} Form</legend>
         <div class="control-group">
           <label class="control-label" for="inputUser">
             {{ form.username.label }}

@@ -17,3 +17,13 @@ class RegistrationForm(Form):
     password = PasswordField('Password', validators=[Required()])
     confirm = PasswordField('Confirm password', validators=[Required(),
                           EqualTo('confirm', message='Passwords must match')])
+
+
+class EditUserForm(Form):
+    """docstring for EditUserForm"""
+
+    username = TextField('Username', validators=[Required()])
+    email = TextField('Email', validators=[Required(), Email()])
+    password = PasswordField('Password', validators=[Required()])
+    confirm = PasswordField('Confirm password', validators=[Required(),
+                          EqualTo('confirm', message='Passwords must match')])
